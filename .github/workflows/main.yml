@@ -3,7 +3,7 @@ on:
   watch:
     types: started
 jobs:
-  Ubuntu:
+  macOS:
     runs-on: macos-latest
     steps:
     - name: SSH connection to Actions
