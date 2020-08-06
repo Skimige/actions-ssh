@@ -1,10 +1,10 @@
-name: macOS
+name: Ubuntu
 on:
   watch:
     types: started
 jobs:
   Ubuntu:
-    runs-on: macos-latest
+    runs-on: ubuntu-20.04
     steps:
     - name: SSH connection to Actions
       uses: P3TERX/debugger-action@master
