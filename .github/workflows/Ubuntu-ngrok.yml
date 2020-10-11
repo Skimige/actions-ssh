@@ -1,17 +1,20 @@
-name: macOS
+# https://github.com/P3TERX/ActionsVM
+
+name: Ubuntu (ngrok)
+
 on:
-  watch:
-    types: started
+  workflow_dispatch:
+
 jobs:
   Instance:
-    runs-on: macos-latest
+    runs-on: ubuntu-latest
 
     steps:
     - name: Checkout
       uses: actions/checkout@main
 
-#     - name: Run Start Script
-#       run: source macos-start.sh
+    - name: Run Start Script
+      run: source ubuntu-start.sh
 
     - name: Start SSH via ngrok
       uses: P3TERX/ssh2actions@main
@@ -24,5 +27,5 @@ jobs:
         TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
         TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
 
-#     - name: Run End Script
-#       run: source macos-end.sh
+    - name: Run End Script
+      run: source ubuntu-end.sh
