@@ -3,8 +3,26 @@ on:
   watch:
     types: started
 jobs:
-  macOS:
+  Instance:
     runs-on: macos-latest
+
     steps:
-    - name: SSH connection to Actions
-      uses: P3TERX/debugger-action@master
+    - name: Checkout
+      uses: actions/checkout@main
+
+#     - name: Run Start Script
+#       run: source macos-start.sh
+
+    - name: Start SSH via ngrok
+      uses: P3TERX/ssh2actions@main
+      with:
+        mode: ngrok
+      env:
+        NGROK_TOKEN: ${{ secrets.NGROK_TOKEN }}
+        NGROK_REGION: jp
+        SSH_PASSWORD: ${{ secrets.SSH_PASSWORD }}
+        TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+        TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+
+#     - name: Run End Script
+#       run: source macos-end.sh
