@@ -39,8 +39,8 @@ jobs:
       - name: Compile firmware
         run: |
           cd $GITHUB_WORKSPACE
-          wget https://gist.github.com/Skimige/30bf6e7a73a3b9b4c62d0cf508b84c1b/raw/de8cea9546b1c0a0ab18240d1b1be0a6b51390f4/.build.sh
-          wget -O .config https://gist.github.com/Skimige/30bf6e7a73a3b9b4c62d0cf508b84c1b/raw/de8cea9546b1c0a0ab18240d1b1be0a6b51390f4/config
+          wget https://gist.github.com/Skimige/30bf6e7a73a3b9b4c62d0cf508b84c1b/raw/7a02c19d9879e90d06dae29d194a34095ed13db6/.build.sh
+          wget https://gist.github.com/Skimige/30bf6e7a73a3b9b4c62d0cf508b84c1b/raw/7a02c19d9879e90d06dae29d194a34095ed13db6/.config
           chmod 0755 .build.sh
           bash .build.sh
 
