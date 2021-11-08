@@ -1,0 +1,66 @@
+name: OpenWrt-CI
+
+on:
+  workflow_dispatch:
+    
+env:
+  TZ: Asia/Shanghai
+
+jobs:
+  build_openwrt:
+    name: Build OpenWrt
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          repository: 'Boos4721/openwrt'
+          ref: master
+          fetch-depth: 0
+
+      - name: Set cache
+        uses: klever1988/cachewrtbuild@main
+        with:
+          ccache: 'true'
+
+      - name: Space cleanup
+        env:
+          DEBIAN_FRONTEND: noninteractive
+        run: |
+          docker rmi `docker images -q`
+          sudo rm -rf /usr/share/dotnet /etc/mysql /etc/php /etc/apt/sources.list.d
+          sudo -E apt-get -y purge azure-cli ghc* zulu* hhvm llvm* firefox google* dotnet* powershell openjdk* mysql* php* android*
+          sudo -E apt-get update
+          sudo -E apt-get -y install build-essential asciidoc binutils bzip2 gawk gettext git libncurses5-dev libz-dev patch python3 python2.7 unzip zlib1g-dev lib32gcc1 libc6-dev-i386 subversion flex uglifyjs git-core gcc-multilib p7zip p7zip-full msmtp libssl-dev texinfo libglib2.0-dev xmlto qemu-utils upx libelf-dev autoconf automake libtool autopoint device-tree-compiler g++-multilib antlr3 gperf wget curl swig rsync
+          sudo -E apt-get -y autoremove --purge
+          sudo -E apt-get clean
+          sudo timedatectl set-timezone "$TZ"
+
+      - name: Compile firmware
+        run: |
+          cd $GITHUB_WORKSPACE
+          wget https://gist.github.com/Skimige/30bf6e7a73a3b9b4c62d0cf508b84c1b/raw/de8cea9546b1c0a0ab18240d1b1be0a6b51390f4/.build.sh
+          wget -O .config https://gist.github.com/Skimige/30bf6e7a73a3b9b4c62d0cf508b84c1b/raw/de8cea9546b1c0a0ab18240d1b1be0a6b51390f4/config
+          chmod 0755 .build.sh
+          bash .build.sh
+
+      - name: Prepare artifact
+        run: |
+          mkdir -p ./artifact/firmware
+          mkdir -p ./artifact/package
+          rm -rf $(find ./bin/targets/ -type d -name "packages")
+          rm -rf $(find ./bin/targets/ -type f -name "*.buildinfo")
+          cp -rf $(find ./bin/targets/ -type f) ./artifact/firmware/
+          cp -rf $(find ./bin/packages/ -type f -name "*.ipk") ./artifact/package/
+
+      - name: Upload package
+        uses: actions/upload-artifact@v2
+        with:
+          name: aarch64_OpenWrt_Package
+          path: ./artifact/package/
+
+      - name: Upload firmware
+        uses: actions/upload-artifact@v2
+        with:
+          name: AX3600_OpenWrt_Firmware
+          path: ./bin/targets/
