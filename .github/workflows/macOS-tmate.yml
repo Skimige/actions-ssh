@@ -25,7 +25,7 @@ jobs:
     - name: Run End Script
       run: source macos-end.sh
 
-    - uses: actions/upload-artifact@master
-      name: Upload Workdir
+    - name: Upload workspace
+      uses: actions/upload-artifact@v2
       with:
-        path: ~
+        path: ${{ github.workspace }}
