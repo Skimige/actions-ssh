@@ -16,11 +16,16 @@ jobs:
     - name: Run Start Script
       run: source ubuntu-start.sh
 
-    - name: Start SSH via tmate
-      uses: P3TERX/ssh2actions@main
+    # - name: Start SSH via tmate
+    #   uses: P3TERX/ssh2actions@main
+    #   env:
+    #     TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+    #     TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+
+    - name: Setup Debug Session
       env:
-        TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
-        TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        TMATE_ENCRYPT_PASSWORD: ${{ secrets.TMATE_ENCRYPT_PASSWORD }}
+      uses: tete1030/safe-debugger-action@master
 
     - name: Run End Script
       run: source ubuntu-end.sh
